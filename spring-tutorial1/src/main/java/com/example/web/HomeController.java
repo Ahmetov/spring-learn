@@ -29,9 +29,17 @@ public class HomeController {
     }
 
     @GetMapping("/main")
-    public String main(Map<String, Object> model) {
-        Iterable<Message> messages = messageRepository.findAll();
-        model.put("messages", messages);
+    public String main(@RequestParam(required = false, defaultValue = "") String tag,
+                       Model model) {
+        Iterable<Message> messages;
+        if (tag == null || tag.isEmpty() ) {
+            messages = messageRepository.findAll();
+        } else {
+            messages = messageRepository.findByTag(tag);
+        }
+
+        model.addAttribute("messages", messages);
+        model.addAttribute("tag", tag);
         return "main";
     }
 
@@ -45,19 +53,6 @@ public class HomeController {
         messageRepository.save(message);
         Iterable<Message> messages = messageRepository.findAll();
 
-        model.put("messages", messages);
-        return "main";
-    }
-
-    //фильтрует по тэгу и возвращает вью где выводятся все сообщения
-    @PostMapping("filter")
-    public String filter (@RequestParam String tag, Map<String, Object> model) {
-        //iterable, потому как findAll вернет List, а findByTag - Iterable
-        Iterable<Message> messages;
-        if (tag == null || tag.isEmpty() ) {
-            messages = messageRepository.findAll();
-        }
-        messages = messageRepository.findByTag(tag);
         model.put("messages", messages);
         return "main";
     }

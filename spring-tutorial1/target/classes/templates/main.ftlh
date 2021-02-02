@@ -13,9 +13,8 @@
     </form>
 </div>
 <div>Список сообщений</div>
-<form method="post" action="filter">
+<form method="get" action="main">
     <input type="text" name="tag">
-    <input type="hidden" name="_csrf" value="${_csrf.token}" />
     <button type="submit">Найти</button>
 </form>
 <#list messages as message>
