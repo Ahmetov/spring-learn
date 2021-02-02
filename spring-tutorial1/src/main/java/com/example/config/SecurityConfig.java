@@ -1,5 +1,6 @@
 package com.example.config;
 
+import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource source;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.
@@ -38,11 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(source)
-                .passwordEncoder(NoOpPasswordEncoder.getInstance())
-                .usersByUsernameQuery("select username, password, is_active from usr where username = ?")
-                .authoritiesByUsernameQuery("select u.username, r.roles from usr u \n" +
-                        "     join user_role r on u.id = r.user_id where u.username =?");
+        auth.userDetailsService(userService).passwordEncoder(NoOpPasswordEncoder.getInstance());;
     }
 
 /*

@@ -1,8 +1,10 @@
 package com.example.web;
 
 import com.example.model.Message;
+import com.example.model.User;
 import com.example.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,10 +37,14 @@ public class HomeController {
 
     //создает новый месадж и заносит его в базу
     //RequestParam from input/url
-    @PostMapping()
-    public String add(@RequestParam String text,@RequestParam String tag, Map<String, Object> model) {
-        messageRepository.save(new Message(text, tag));
+    @PostMapping("/main")
+    public String add(@AuthenticationPrincipal User user,
+            @RequestParam String text,@RequestParam String tag, Map<String, Object> model) {
+        Message message = new Message(text, tag);
+        message.setUser(user);
+        messageRepository.save(message);
         Iterable<Message> messages = messageRepository.findAll();
+
         model.put("messages", messages);
         return "main";
     }
