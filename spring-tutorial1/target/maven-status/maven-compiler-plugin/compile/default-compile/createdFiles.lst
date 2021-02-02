@@ -1,0 +1,5 @@
+com\example\Main.class
+com\example\web\HomeController.class
+com\example\model\Message.class
+com\example\repository\MessageRepository.class
+com\example\model\User.class
