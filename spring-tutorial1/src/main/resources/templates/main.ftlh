@@ -6,7 +6,7 @@
     <span><a href="/user">User list</a></span>
 </div>
 <div>
-    <form method="post" enctype="multipart/form-data ">
+    <form method="post" enctype="multipart/form-data">
         <input type="text" name="text" placeholder="Введите сообщение" />
         <input type="text" name="tag" placeholder="Тэг">
         <input type="file" name="file">
